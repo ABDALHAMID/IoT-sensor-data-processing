@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.egg-info/
+.eggs/
+*.log
+
+# Virtual environment
+venv/
+.env
+
+
+# Docker
+*.pid
+*.tar
+*.log
+docker-compose.override.yml
+
+# VSCode
+.vscode/
+
+# NiFi state or temp
+nifi_state/
+nifi_temp/
+
+# PyCharm
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+pgdata/
+postgres/*.sql~
+
+# Node / front (if added later)
+node_modules/
+
+# Coverage / test
+htmlcov/
+.tox/
+.coverage
+.cache/
+
+# Logs
+logs/
+*.log
