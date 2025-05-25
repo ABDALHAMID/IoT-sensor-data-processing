@@ -18,7 +18,8 @@ RUN python -m venv $VIRTUAL_ENV
 
 # Install Python packages inside the virtual environment
 COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the app
 COPY . .
