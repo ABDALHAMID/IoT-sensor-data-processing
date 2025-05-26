@@ -3,9 +3,7 @@
 services:
 
   postgres:
-    build:
-      context: ./postgres
-      dockerfile: Dockerfile
+    image: postgres:13
     container_name: postgres
     restart: always
     env_file:
@@ -14,8 +12,11 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-
-
+      - ./postgres/init:/docker-entrypoint-initdb.d  # Database initialization scripts
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}  # Add these to your .env file
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   zookeeper:
     image: wurstmeister/zookeeper
@@ -44,17 +45,16 @@ services:
     environment:
       - NIFI_WEB_HTTP_PORT=8080
       - NIFI_WEB_HTTP_HOST=0.0.0.0
-      - SINGLE_USER_CREDENTIALS_USERNAME=admin
-      - SINGLE_USER_CREDENTIALS_PASSWORD=ctsBtRBKHRAx69EqUghvvgEvjnaLjFEB
+      - NIFI_SENSITIVE_PROPS_KEY=your_secure_key_here  # 👈 Add this
+      - NIFI_SENSITIVE_PROPS_ALGORITHM=NIFI_PBKDF2_AES_GCM_256  # 👈 Add this
     volumes:
-      - ./nifi/lib:/opt/nifi/nifi-current/lib
-      - nifi-conf:/opt/nifi/nifi-current/conf
       - nifi_flowfile:/opt/nifi/nifi-current/flowfile_repository
       - nifi_content:/opt/nifi/nifi-current/content_repository
+    depends_on:
+      - postgres
+      - kafka
     restart: unless-stopped
 
-
-   
 
 
   api:
@@ -88,6 +88,5 @@ services:
 
 volumes:
   pgdata:
-  nifi-conf:
   nifi_flowfile:
   nifi_content:
